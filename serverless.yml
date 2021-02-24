@@ -16,6 +16,7 @@ provider:
   region: us-east-2
   environment:
     tableName: notes
+    stripeSecretKey: ${env:STRIPE_SECRET_KEY}
 
   # 'iamRoleStatements' defines the permission policy for the Lambda function.
 
@@ -44,7 +45,6 @@ functions:
           path: scratch
           method: post
           authorizer: aws_iam
-
   get:
     # Defines an HTTP API endpoint that calls the main function in get.js
     # - path: url path is /scratch/{id}
@@ -55,7 +55,6 @@ functions:
           path: scratch/{id}
           method: get
           authorizer: aws_iam
-
   list:
     # Defines an HTTP API endpoint that calls the main function in list.js
     # - path: url path is /notes
@@ -66,7 +65,6 @@ functions:
           path: scratch
           method: get
           authorizer: aws_iam
-
   update:
     # Defines an HTTP API endpoint that calls the main function in update.js
     # - path: url path is /scratch/{id}
@@ -77,7 +75,6 @@ functions:
           path: scratch/{id}
           method: put
           authorizer: aws_iam
-
   delete:
     # Defines an HTTP API endpoint that calls the main function in delete.js
     # - path: url path is /scratch/{id}
@@ -87,4 +84,14 @@ functions:
       - http:
           path: scratch/{id}
           method: delete
+          authorizer: aws_iam
+  billing:
+    # Defines an HTTP API endpoint that calls the main function in billing.js
+    # - path: url path is /billing
+    # - method: POST request
+    handler: billing.main
+    events:
+      - http:
+          path: billing
+          method: post
           authorizer: aws_iam
